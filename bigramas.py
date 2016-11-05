@@ -10,7 +10,7 @@ from nltk.collocations import *
 # contagem de bigramas sem alisamento
 def main():
 
-	file_path = '/Users/tiagosimoes/Google Drive/IST/MEIC/LN/P/P2/Corpora/treino/AlmadaNegreiros/pg22615.txt'
+	file_path = '/Corpora/treino/AlmadaNegreiros/pg22615.txt'
 	with open(file_path, 'r') as file:
 		words = list()
 		content = file.readlines()
