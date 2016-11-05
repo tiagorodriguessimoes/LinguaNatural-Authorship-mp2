@@ -90,4 +90,5 @@ ENV/
 *.suo
 *.sln
 *.pyproj
+*.DS_STORE
 /Run.py
