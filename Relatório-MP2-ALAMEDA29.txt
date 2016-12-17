@@ -1,0 +1,112 @@
+MP2-LN
+Grupo 29
+João Pinheiro, 73
+Tiago Simões, 73100
+
+Todo o projeto foi executado em ambiente OSX utilizando as ferramentas ngram-count, python e Shell script.
+Utilizamos a ferramenta ngram-count para a geração de ficheiros de n-gramas e de modelos de língua.
+Python para:
+- Normalizar os ficheiros de texto, isto é, para que a pontuação tenha sempre um espaço à direita e à esquerda, bem como as conversões de maiúsculas em minúsculas (quando aplicado);
+- Remover palavras funcionais (stopwords);
+- Identificar os autores.
+Bash para:
+- Criar os ficheiros experimentais.
+Instruções de reprodução:
+1 – Colocar a pasta “Corpora” (já extraída do .zip, fornecida pelo corpo docente) na diretoria desejada
+2 – Colocar os ficheiros Python (.py) na mesma diretoria
+3 – Colocar o ficheiro run.sh na mesma diretoria
+4 – Alterar a variável ngramcountpath para conter o caminho até à instalação do SRILM da máquina local (exemplo: “/Applications/srilm-1.7.1/bin/macosx/ngram-count”)
+5 – Correr o ficheiro run.sh
+Experiências
+As experiências realizadas foram: (1) variar a normalização (converter para minúsculas ou não), (2) utilizar alisamento ou não, e (3) remover palavras funcionais ou não. Em todas as experiências foram utilizados unigramas e bigramas (cada experiência produz dois resultados, para os respetivos).
+As experiências escolhidas são incrementais, isto é, utilizam os seus métodos e todos os anteriores.
+
+Em todas as experiências foi utilizada a mesma forma de determinar a semelhança entre as contagens:
+	- Reunir as 500 maiores contagens de ngramas (para corpora de treino e de teste);
+	- Para cada ngrama do corpus de teste: comparar a posição (índice) da contagem entre o corpus de treino e de teste. No caso de a contagem não estar presente no top 500 do corpus de treino é dada a pontuação máxima (500 neste caso).
+      Fórmula(pseudo-código): pontuação(i) = abs(find(i, treino) – find(i, teste))
+	- Determinar a pontuação total do corpus de teste (quanto menor, mais semelhante ao corpus de treino).
+Resultados obtidos:
+Experiência1 (ficheiros de experiência 1, 2, 3, e 4):
+
+COM Maiúsculas e Minúsculas:
+Unigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Camilo Castelo-Branco
+texto6.txt -> José Rodrigues dos Santos
+
+Bigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Eça de Queirós
+texto6.txt -> José Rodrigues dos Santos
+
+
+SÓ COM Minúsculas:
+
+Unigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Camilo Castelo-Branco
+texto6.txt -> José Rodrigues dos Santos
+Bigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Eça de Queirós
+texto6.txt -> José Rodrigues dos Santos
+
+
+Experiência2 (ficheiros de experiência 5, e 6):
+
+COM Alisamento Witten-Bell:
+Unigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Camilo Castelo-Branco
+texto6.txt -> José Rodrigues dos Santos
+
+Bigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Eça de Queirós
+texto6.txt -> José Rodrigues dos Santos
+
+Experiência3 (ficheiros de experiência 7, e 8):
+
+
+
+COM Remoção de Palavras Funcionais (Stopwords):
+Unigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Camilo Castelo-Branco
+texto6.txt -> José Rodrigues dos Santos
+Bigramas:
+texto1.txt -> José Saramago
+texto2.txt -> Almada Negreiros
+texto3.txt -> Luísa Marques Silva
+texto4.txt -> Eça de Queirós
+texto5.txt -> Camilo Castelo-Branco
+texto6.txt -> José Rodrigues dos Santos
+Nota: em todas as experiências os resultados obtidos foram os mesmos para corpora de teste com 500 palavras ou 1000 palavras.
+
+Comentários:
+As experiências 1 e 2 provaram que para corpora pequenos como os trabalhados, não se revela muito diferente a normalização de maiúsculas e minúsculas, bem como a utilização desta técnica de alisamento. No caso da normalização de maiúsculas e minúsculas, são poucos os casos onde as contagens poderão variar (inícios de frase, nomes, etc.). Como todos os textos são escritos em prosa, não vemos grande impacto nas contagens (talvez em poesia esta técnica possa ser mais relevante).
+No caso do alisamento Witten-Bell, apesar de ser o método mais recomendado para corpora pequenos, também não se registaram alterações significativas aos resultados. Isto deve-se ao facto de este método apenas alisar as classes inferiores de frequência (algo que nunca foi visto é considerado como se fosse visto uma vez). Como nós estamos a basear a pontuação nas classes de maior frequência, pouco ou nada o alisamento irá influenciar estas contagens (pelo menos a ordem em que aparecem será a mesma, que é o nosso critério prevalecente).
+
+Na experiência 3 podemos observar uma correção do texto5.txt! A remoção das palavras funcionais causou alterações nas contagens superiores, removendo os ngramas que contêm as palavras mais comuns da língua, facilitando ao nosso algoritmo identificar os ngramas mais utilizados nos textos de um escritor, mas que não são tão comuns noutros textos de outros autores. Isto permitiu, com base na nossa pontuação, melhorar os resultados obtidos.
